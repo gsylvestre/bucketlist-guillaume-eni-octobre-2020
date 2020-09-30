@@ -5,14 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends AbstractController
+class MainController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      */
-    
     public function home()
     {
-        die("coucou");
+        return $this->render('default/home.html.twig');
     }
 }

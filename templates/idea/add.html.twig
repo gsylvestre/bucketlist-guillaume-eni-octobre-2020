@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+Add an idea !
+{% endblock %}
+
+{% block main %}
+    <h2>Add an idea!</h2>
+    <div class="add-idea-form">
+        {{ form(ideaForm, {'attr': {'novalidate': 'novalidate'}}) }}
+    </div>
+{% endblock %}
+

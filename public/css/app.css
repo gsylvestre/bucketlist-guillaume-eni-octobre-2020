@@ -22,3 +22,31 @@ footer {
 a {
     text-decoration: none;
 }
+
+.alert {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.alert-success {
+    background-color: lawngreen;
+}
+
+
+.add-idea-form label {
+    display: block;
+    margin-top: 15px;
+}
+
+.add-idea-form input,
+.add-idea-form textarea {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-idea-form button {
+    margin-top: 15px;
+
+}

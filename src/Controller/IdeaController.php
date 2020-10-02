@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Idea;
+use App\Form\IdeaType;
 use App\Repository\IdeaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IdeaController extends AbstractController
 {
+
+    /**
+     * @Route("/ideas/add", name="idea_add")
+     */
+    public function add(Request $request)
+    {
+        $idea = new Idea();
+        $ideaForm = $this->createForm(IdeaType::class, $idea);
+
+        $ideaForm->handleRequest($request);
+
+        if ($ideaForm->isSubmitted() && $ideaForm->isValid()) {
+            //hydrater les propriétés manquantes
+            $idea->setIsPublished(true);
+            $idea->setDateCreated(new \DateTime());
+
+            //sauvegarder l'entité en bdd
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($idea);
+            $em->flush();
+
+            //ajoute un message en session pour l'afficher sur la prochaine page
+            $this->addFlash('success', 'Your idea was created! Thanks dude!');
+
+            //redirige vers la page de l'idée nouvellement créée
+            return $this->redirectToRoute('idea_details', ['id' => $idea->getId()]);
+        }
+
+        return $this->render('idea/add.html.twig', [
+            "ideaForm" => $ideaForm->createView()
+        ]);
+    }
+
     /**
      * @Route("/ideas", name="idea_list")
      */

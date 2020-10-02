@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IdeaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=IdeaRepository::class)
@@ -18,16 +19,39 @@ class Idea
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Please provide your idea!")
+     * @Assert\Length(
+     *     min="5",
+     *     max="250",
+     *     minMessage="too short",
+     *     maxMessage="too long"
+     * )
+     *
      * @ORM\Column(type="string", length=250)
      */
     private $title;
 
     /**
+     *
+     * @Assert\Length(
+     *     min="5",
+     *     max="10000",
+     *     minMessage="too short",
+     *     maxMessage="too long"
+     * )
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
+     *
+     * @Assert\NotBlank(message="Please provide your name!")
+     * @Assert\Length(
+     *     min="2",
+     *     max="30",
+     *     minMessage="too short",
+     *     maxMessage="too long"
+     * )
      * @ORM\Column(type="string", length=30)
      */
     private $author;

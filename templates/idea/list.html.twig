@@ -7,7 +7,7 @@
     <div>
         {% for idea in ideas %}
             <article>
-                <h2><a href="{{ path('idea_details', {'id': idea.id}) }}">{{ idea.title }}</a></h2>
+                <h2><a href="{{ path('idea_details', {'id': idea.id}) }}">{{ idea.title }} ({{ idea.category.name }})</a></h2>
             </article>
         {% endfor %}
     </div>

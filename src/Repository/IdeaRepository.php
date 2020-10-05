@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Idea;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,27 @@ class IdeaRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Idea::class);
+    }
+
+    public function findWithCategories()
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->andWhere('i.isPublished = true');
+
+        //on demande de récupérer en jointure les catégories
+        $qb->join('i.category', 'c');
+        //ET ON N'OUBLIE PAS DE LES SÉLECTIONNER !
+        $qb->addSelect('c');
+
+        $qb->addOrderBy('i.dateCreated', 'DESC');
+        $qb->setMaxResults(50);
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        //ou si nous avions fait une relation Many2Many, on aurait pu utiliser le Paginator pour avoir un bon limit fonctionnel
+        //return new Paginator($query);
+        return $results;
     }
 
     // /**

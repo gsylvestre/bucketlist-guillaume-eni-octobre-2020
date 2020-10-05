@@ -50,7 +50,7 @@ class IdeaController extends AbstractController
     public function list(IdeaRepository $ideaRepository)
     {
         //récupère les 50 idées publiées les plus récentes
-        $ideas = $ideaRepository->findBy(["isPublished" => true], ["dateCreated" => "DESC"], 50);
+        $ideas = $ideaRepository->findWithCategories();
 
         return $this->render('idea/list.html.twig', [
             "ideas" => $ideas

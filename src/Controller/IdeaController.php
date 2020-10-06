@@ -76,6 +76,10 @@ class IdeaController extends AbstractController
         //récupère une Idea en fonction de la clé primaire
         $idea = $ideaRepository->find($id);
 
+        if (!$idea){
+            throw $this->createNotFoundException('this idea do not exists !');
+        }
+
         return $this->render('idea/details.html.twig', [
             "idea" => $idea
         ]);

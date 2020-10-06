@@ -17,7 +17,14 @@ class IdeaController extends AbstractController
      */
     public function add(Request $request)
     {
+        //interdit l'accès à tout le monde, sauf aux utilisateurs connectés ayant le role ROLE_USER
+        $this->denyAccessUnlessGranted("ROLE_USER");
+
         $idea = new Idea();
+        //valeur par défaut qui va s'afficher dans le form !
+        //ici, le pseudo du user connecté
+        $idea->setAuthor($this->getUser()->getUsername());
+
         $ideaForm = $this->createForm(IdeaType::class, $idea);
 
         $ideaForm->handleRequest($request);

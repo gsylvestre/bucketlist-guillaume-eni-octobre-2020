@@ -20,7 +20,15 @@
             <a href="{{ path('home') }}">Home</a>
             <a href="{{ path('idea_list') }}">All ideas</a>
             <a href="{{ path('about') }}">About us</a>
-            <a href="{{ path('idea_add') }}">Add an idea</a>
+            {% if app.user %}
+                <a href="{{ path('idea_add') }}">Add an idea</a>
+
+                <a href="{{ path('app_logout') }}">Logout</a>
+                <div>Hello {{ app.user.username }}</div>
+            {% else %}
+                <a href="{{ path('app_register') }}">Register</a>
+                <a href="{{ path('app_login') }}">Login</a>
+            {% endif %}
         </nav>
     </header>
 

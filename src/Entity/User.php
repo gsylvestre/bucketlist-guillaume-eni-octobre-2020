@@ -41,6 +41,11 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateUpdated;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +127,18 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getDateUpdated(): ?\DateTimeInterface
+    {
+        return $this->dateUpdated;
+    }
+
+    public function setDateUpdated(?\DateTimeInterface $dateUpdated): self
+    {
+        $this->dateUpdated = $dateUpdated;
 
         return $this;
     }

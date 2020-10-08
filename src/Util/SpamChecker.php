@@ -2,8 +2,17 @@
 
 namespace App\Util;
 
+use Doctrine\Persistence\ManagerRegistry;
+
 class SpamChecker
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     public function containsSpam(string $text)
     {
         $spamWords = ["viagra", "drug", "poutine"];

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Idea;
+use App\Event\IdeaCreatedEvent;
 use App\Form\IdeaType;
 use App\Repository\IdeaRepository;
+use App\Util\SpamChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,7 +22,7 @@ class IdeaController extends AbstractController
     /**
      * @Route("/ideas/add", name="idea_add")
      */
-    public function add(Request $request)
+    public function add(Request $request, SpamChecker $spamChecker, EventDispatcherInterface $eventDispatcher)
     {
         //interdit l'accès à tout le monde, sauf aux utilisateurs connectés ayant le role ROLE_USER
         $this->denyAccessUnlessGranted("ROLE_USER");
@@ -38,10 +41,16 @@ class IdeaController extends AbstractController
             $idea->setIsPublished(true);
             $idea->setDateCreated(new \DateTime());
 
+            $spamChecker->containsSpam($idea->getDescription());
+
             //sauvegarder l'entité en bdd
             $em = $this->getDoctrine()->getManager();
             $em->persist($idea);
             $em->flush();
+
+            //déclenche l'événement IdeaCreatedEvent
+            $event = new IdeaCreatedEvent($idea);
+            $eventDispatcher->dispatch($event);
 
             //ajoute un message en session pour l'afficher sur la prochaine page
             $this->addFlash('success', 'Your idea was created! Thanks dude!');

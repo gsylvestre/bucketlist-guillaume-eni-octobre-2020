@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
      */
     public function logoutRedirect()
     {
-        $this->addFlash('success', 'You are now disconnected. Come back sooooon!');
+        //$this->addFlash('success', 'You are now disconnected. Come back sooooon!');
         return $this->redirectToRoute('home');
     }
 

@@ -6,6 +6,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
@@ -32,6 +33,8 @@ class Category
     private $name;
 
     /**
+     *
+     * @Serializer\Exclude()
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity=Idea::class, mappedBy="category")
      */

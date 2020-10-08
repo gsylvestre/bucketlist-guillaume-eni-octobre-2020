@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IdeaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -62,6 +63,7 @@ class Idea
     private $isPublished;
 
     /**
+     * @Serializer\Exclude()
      * @ORM\Column(type="datetime")
      */
     private $dateCreated;

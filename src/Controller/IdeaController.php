@@ -6,9 +6,12 @@ use App\Entity\Idea;
 use App\Event\IdeaCreatedEvent;
 use App\Form\IdeaType;
 use App\Repository\IdeaRepository;
+use App\Uploader\Uploader;
 use App\Util\SpamChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,7 +25,12 @@ class IdeaController extends AbstractController
     /**
      * @Route("/ideas/add", name="idea_add")
      */
-    public function add(Request $request, SpamChecker $spamChecker, EventDispatcherInterface $eventDispatcher)
+    public function add(
+        Request $request,
+        SpamChecker $spamChecker,
+        EventDispatcherInterface $eventDispatcher,
+        Uploader $uploader
+    )
     {
         //interdit l'accès à tout le monde, sauf aux utilisateurs connectés ayant le role ROLE_USER
         $this->denyAccessUnlessGranted("ROLE_USER");
@@ -40,6 +48,14 @@ class IdeaController extends AbstractController
             //hydrater les propriétés manquantes
             $idea->setIsPublished(true);
             $idea->setDateCreated(new \DateTime());
+
+            //traiter l'upload
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $ideaForm->get('picture')->getData();
+            if ($uploadedFile){
+                $newFilename = $uploader->upload($uploadedFile, $this->getParameter('upload_dir'));
+                $idea->setPictureFilename($newFilename);
+            }
 
             $spamChecker->containsSpam($idea->getDescription());
 

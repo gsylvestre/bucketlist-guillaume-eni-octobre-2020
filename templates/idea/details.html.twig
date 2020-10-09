@@ -5,6 +5,7 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem consectetur earum eligendi illo incidunt iure libero magni minus nam natus obcaecati odit quasi qui quis ratione, repellendus rerum suscipit voluptates.</p>
 
     <article>
+        <img src="{{ asset('uploads/' ~ idea.pictureFilename) }}" alt="{{ idea.title }}">
         <h2><a href="{{ path('idea_details', {'id': idea.id}) }}">{{ idea.title }}</a></h2>
         <p>{{ idea.category.name }}</p>
         <div class="idea-description">{{ idea.description }}</div>

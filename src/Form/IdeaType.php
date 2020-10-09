@@ -7,9 +7,12 @@ use App\Entity\Idea;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 
 class IdeaType extends AbstractType
 {
@@ -30,6 +33,18 @@ class IdeaType extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
                 },
+            ])
+            ->add('picture', FileType::class, [
+                'mapped' => false, //ce champ n'existe pas dans mon entité
+                'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '7024k',
+                    ])
+                ],
             ])
             ->add('send', SubmitType::class)
         ;
